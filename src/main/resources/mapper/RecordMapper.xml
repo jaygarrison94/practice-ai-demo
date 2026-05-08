@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.privatebutler.infrastructure.persistence.bookkeeping.RecordMapper">
+
+    <resultMap id="BaseResultMap" type="com.privatebutler.domain.bookkeeping.entity.Record">
+        <id column="id" property="id"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="user_id" property="userId"/>
+        <result column="type" property="type"/>
+        <result column="amount" property="amount"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="category_name" property="categoryName"/>
+        <result column="note" property="note"/>
+        <result column="record_date" property="recordDate"/>
+    </resultMap>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM bk_record WHERE id = #{id}
+    </select>
+
+    <select id="findByUserIdAndStatusOrderByRecordDateDesc" resultMap="BaseResultMap">
+        SELECT * FROM bk_record WHERE user_id = #{userId} AND status = #{status} ORDER BY record_date DESC
+    </select>
+
+    <select id="findByUserIdAndRecordDateBetweenAndStatus" resultMap="BaseResultMap">
+        SELECT * FROM bk_record WHERE user_id = #{userId} AND record_date BETWEEN #{start} AND #{end} AND status = #{status} ORDER BY record_date DESC
+    </select>
+
+    <select id="findByUserIdAndTypeAndStatus" resultMap="BaseResultMap">
+        SELECT * FROM bk_record WHERE user_id = #{userId} AND type = #{type} AND status = #{status} ORDER BY record_date DESC
+    </select>
+
+    <select id="findByUserIdAndCategoryIdAndStatus" resultMap="BaseResultMap">
+        SELECT * FROM bk_record WHERE user_id = #{userId} AND category_id = #{categoryId} AND status = #{status} ORDER BY record_date DESC
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM bk_record
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bk_record (user_id, type, amount, category_id, category_name, note, record_date, status, created_at, updated_at)
+        VALUES (#{userId}, #{type}, #{amount}, #{categoryId}, #{categoryName}, #{note}, #{recordDate}, #{status}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="update">
+        UPDATE bk_record
+        SET user_id = #{userId}, type = #{type}, amount = #{amount}, category_id = #{categoryId},
+            category_name = #{categoryName}, note = #{note}, record_date = #{recordDate},
+            status = #{status}, updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

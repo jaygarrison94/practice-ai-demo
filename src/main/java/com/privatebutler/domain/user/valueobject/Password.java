@@ -1,25 +1,24 @@
 package com.privatebutler.domain.user.valueobject;
 
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.Transient;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.apache.commons.lang3.StringUtils;
 
 @Getter
+@Setter
 @EqualsAndHashCode
-@NoArgsConstructor
-@Embeddable
 public class Password {
 
     private String value;
 
-    @Transient
-    private Strength strength;
+    private transient Strength strength;
 
     public enum Strength {
         WEAK, MEDIUM, STRONG
+    }
+
+    public Password() {
     }
 
     public Password(String value) {

@@ -14,7 +14,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ScheduleRepositoryImpl implements ScheduleRepository {
 
-    private final ScheduleJpaMapper mapper;
+    private final ScheduleMapper mapper;
 
     @Override
     public Optional<Schedule> findById(Long id) {
@@ -23,12 +23,20 @@ public class ScheduleRepositoryImpl implements ScheduleRepository {
 
     @Override
     public Schedule save(Schedule entity) {
-        return mapper.save(entity);
+        if (entity.getId() == null) {
+            entity.onCreate();
+            mapper.insert(entity);
+        } else {
+            entity.onUpdate();
+            mapper.update(entity);
+        }
+        return entity;
     }
 
     @Override
     public void delete(Schedule entity) {
-        mapper.delete(entity);
+        entity.onUpdate();
+        mapper.update(entity);
     }
 
     @Override

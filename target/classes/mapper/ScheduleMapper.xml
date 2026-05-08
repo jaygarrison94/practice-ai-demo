@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.privatebutler.infrastructure.persistence.schedule.ScheduleMapper">
+
+    <resultMap id="BaseResultMap" type="com.privatebutler.domain.schedule.entity.Schedule">
+        <id column="id" property="id"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="user_id" property="userId"/>
+        <result column="title" property="title"/>
+        <result column="schedule_date" property="scheduleDate"/>
+        <result column="schedule_time" property="scheduleTime"/>
+        <result column="remind_before" property="remindBefore"/>
+        <result column="note" property="note"/>
+        <result column="category" property="category"/>
+        <association property="repeatRule" javaType="com.privatebutler.domain.schedule.entity.RepeatRule">
+            <result column="repeat_type" property="repeatType"/>
+            <result column="repeat_week_days" property="repeatWeekDays"/>
+            <result column="repeat_month_date" property="repeatMonthDate"/>
+            <result column="repeat_end_date" property="repeatEndDate"/>
+        </association>
+    </resultMap>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM sch_schedule WHERE id = #{id}
+    </select>
+
+    <select id="findByUserIdAndStatusOrderByScheduleDateAsc" resultMap="BaseResultMap">
+        SELECT * FROM sch_schedule WHERE user_id = #{userId} AND status = #{status} ORDER BY schedule_date ASC
+    </select>
+
+    <select id="findByUserIdAndScheduleDateAndStatus" resultMap="BaseResultMap">
+        SELECT * FROM sch_schedule WHERE user_id = #{userId} AND schedule_date = #{date} AND status = #{status}
+    </select>
+
+    <select id="findByUserIdAndCategoryAndStatus" resultMap="BaseResultMap">
+        SELECT * FROM sch_schedule WHERE user_id = #{userId} AND category = #{category} AND status = #{status}
+    </select>
+
+    <select id="findByUserIdAndTitleContainingAndStatus" resultMap="BaseResultMap">
+        SELECT * FROM sch_schedule WHERE user_id = #{userId} AND title LIKE CONCAT('%', #{keyword}, '%') AND status = #{status}
+    </select>
+
+    <select id="findUpcomingSchedules" resultMap="BaseResultMap">
+        SELECT * FROM sch_schedule
+        WHERE user_id = #{userId} AND status = 1
+        AND TIMESTAMP(schedule_date, schedule_time) BETWEEN #{now} AND #{window}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM sch_schedule
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sch_schedule (user_id, title, schedule_date, schedule_time, remind_before, note, category,
+                                  repeat_type, repeat_week_days, repeat_month_date, repeat_end_date,
+                                  status, created_at, updated_at)
+        VALUES (#{userId}, #{title}, #{scheduleDate}, #{scheduleTime}, #{remindBefore}, #{note}, #{category},
+                #{repeatRule.repeatType}, #{repeatRule.repeatWeekDays}, #{repeatRule.repeatMonthDate}, #{repeatRule.repeatEndDate},
+                #{status}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="update">
+        UPDATE sch_schedule
+        SET user_id = #{userId}, title = #{title}, schedule_date = #{scheduleDate}, schedule_time = #{scheduleTime},
+            remind_before = #{remindBefore}, note = #{note}, category = #{category},
+            repeat_type = #{repeatRule.repeatType}, repeat_week_days = #{repeatRule.repeatWeekDays},
+            repeat_month_date = #{repeatRule.repeatMonthDate}, repeat_end_date = #{repeatRule.repeatEndDate},
+            status = #{status}, updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

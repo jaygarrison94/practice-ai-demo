@@ -5,6 +5,7 @@ import com.privatebutler.domain.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,7 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserRepositoryImpl implements UserRepository {
 
-    private final UserJpaMapper mapper;
+    private final UserMapper mapper;
 
     @Override
     public Optional<User> findById(Long id) {
@@ -21,12 +22,20 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public User save(User entity) {
-        return mapper.save(entity);
+        if (entity.getId() == null) {
+            entity.onCreate();
+            mapper.insert(entity);
+        } else {
+            entity.onUpdate();
+            mapper.update(entity);
+        }
+        return entity;
     }
 
     @Override
     public void delete(User entity) {
-        mapper.delete(entity);
+        entity.onUpdate();
+        mapper.update(entity);
     }
 
     @Override
@@ -36,11 +45,11 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public Optional<User> findByPhone(String phone) {
-        return mapper.findByPhoneValue(phone);
+        return mapper.findByPhone(phone);
     }
 
     @Override
     public boolean existsByPhone(String phone) {
-        return mapper.existsByPhoneValue(phone);
+        return mapper.existsByPhone(phone);
     }
 }

@@ -13,7 +13,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RecordRepositoryImpl implements RecordRepository {
 
-    private final RecordJpaMapper mapper;
+    private final RecordMapper mapper;
 
     @Override
     public Optional<Record> findById(Long id) {
@@ -22,12 +22,20 @@ public class RecordRepositoryImpl implements RecordRepository {
 
     @Override
     public Record save(Record entity) {
-        return mapper.save(entity);
+        if (entity.getId() == null) {
+            entity.onCreate();
+            mapper.insert(entity);
+        } else {
+            entity.onUpdate();
+            mapper.update(entity);
+        }
+        return entity;
     }
 
     @Override
     public void delete(Record entity) {
-        mapper.delete(entity);
+        entity.onUpdate();
+        mapper.update(entity);
     }
 
     @Override

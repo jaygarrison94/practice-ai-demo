@@ -1,34 +1,29 @@
 package com.privatebutler.domain.schedule.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDate;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@Embeddable
 @Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class RepeatRule {
 
-    @Column(name = "repeat_type")
     private String repeatType;
 
-    @Column(name = "repeat_week_days")
     private String repeatWeekDays;
 
-    @Column(name = "repeat_month_date")
     private Integer repeatMonthDate;
 
-    @Column(name = "repeat_end_date")
     private LocalDate repeatEndDate;
 
     public boolean isRepeating() {

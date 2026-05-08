@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.privatebutler.infrastructure.persistence.user.UserMapper">
+
+    <resultMap id="BaseResultMap" type="com.privatebutler.domain.user.entity.User">
+        <id column="id" property="id"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <result column="updated_at" property="updatedAt"/>
+        <result column="remember_password" property="rememberPassword"/>
+        <result column="login_fail_count" property="loginFailCount"/>
+        <result column="lock_time" property="lockTime"/>
+        <result column="last_login_time" property="lastLoginTime"/>
+        <association property="phone" javaType="com.privatebutler.domain.user.valueobject.PhoneNumber">
+            <result column="phone" property="value"/>
+        </association>
+        <association property="password" javaType="com.privatebutler.domain.user.valueobject.Password">
+            <result column="password" property="value"/>
+        </association>
+    </resultMap>
+
+    <select id="findById" resultMap="BaseResultMap">
+        SELECT * FROM sys_user WHERE id = #{id}
+    </select>
+
+    <select id="findByPhone" resultMap="BaseResultMap">
+        SELECT * FROM sys_user WHERE phone = #{phone}
+    </select>
+
+    <select id="existsByPhone" resultType="boolean">
+        SELECT COUNT(1) FROM sys_user WHERE phone = #{phone}
+    </select>
+
+    <select id="findAll" resultMap="BaseResultMap">
+        SELECT * FROM sys_user
+    </select>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO sys_user (phone, password, remember_password, login_fail_count, lock_time, last_login_time, status, created_at, updated_at)
+        VALUES (#{phone.value}, #{password.value}, #{rememberPassword}, #{loginFailCount}, #{lockTime}, #{lastLoginTime}, #{status}, #{createdAt}, #{updatedAt})
+    </insert>
+
+    <update id="update">
+        UPDATE sys_user
+        SET phone = #{phone.value}, password = #{password.value}, remember_password = #{rememberPassword},
+            login_fail_count = #{loginFailCount}, lock_time = #{lockTime}, last_login_time = #{lastLoginTime},
+            status = #{status}, updated_at = #{updatedAt}
+        WHERE id = #{id}
+    </update>
+
+</mapper>

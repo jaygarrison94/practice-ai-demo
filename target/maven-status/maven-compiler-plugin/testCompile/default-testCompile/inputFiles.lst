@@ -1,5 +1,5 @@
-/Users/ninebot/privateCode/practice-ai-demo/src/test/java/com/privatebutler/config/TestSecurityConfig.java
-/Users/ninebot/privateCode/practice-ai-demo/src/test/java/com/privatebutler/PrivateButlerTestApplication.java
-/Users/ninebot/privateCode/practice-ai-demo/src/test/java/com/privatebutler/interfaces/schedule/ScheduleControllerTest.java
-/Users/ninebot/privateCode/practice-ai-demo/src/test/java/com/privatebutler/interfaces/user/UserControllerTest.java
-/Users/ninebot/privateCode/practice-ai-demo/src/test/java/com/privatebutler/interfaces/bookkeeping/BookkeepingControllerTest.java
+/Users/ninebot/privateCode/code/practice-ai-demo/src/test/java/com/privatebutler/PrivateButlerTestApplication.java
+/Users/ninebot/privateCode/code/practice-ai-demo/src/test/java/com/privatebutler/config/TestSecurityConfig.java
+/Users/ninebot/privateCode/code/practice-ai-demo/src/test/java/com/privatebutler/interfaces/user/UserControllerTest.java
+/Users/ninebot/privateCode/code/practice-ai-demo/src/test/java/com/privatebutler/interfaces/schedule/ScheduleControllerTest.java
+/Users/ninebot/privateCode/code/practice-ai-demo/src/test/java/com/privatebutler/interfaces/bookkeeping/BookkeepingControllerTest.java
