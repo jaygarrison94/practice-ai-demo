@@ -1,0 +1,32 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: private-butler-server
+  datasource:
+    url: jdbc:mysql://localhost:3306/private_butler?useUnicode=true&characterEncoding=utf-8&serverTimezone=Asia/Shanghai
+    username: root
+    password: 992995
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
+        format_sql: true
+  data:
+    redis:
+      host: localhost
+      port: 6379
+      timeout: 3000
+
+jwt:
+  secret: PrivateButler2024SecretKeyForJWTTokenGenerationMustBe256BitsLong
+  expiration: 259200000
+
+sms:
+  valid-duration: 300
+  resend-interval: 60
