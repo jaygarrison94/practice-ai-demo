@@ -20,6 +20,9 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -70,6 +73,9 @@ public class SecurityConfig {
                     String cachedToken = redisTemplate.opsForValue().get("token:" + userId);
                     if (token.equals(cachedToken)) {
                         request.setAttribute("userId", Long.valueOf(userId));
+                        UsernamePasswordAuthenticationToken authentication =
+                            new UsernamePasswordAuthenticationToken(userId, null, List.of());
+                        SecurityContextHolder.getContext().setAuthentication(authentication);
                     }
                 }
                 filterChain.doFilter(request, response);
